@@ -1,4 +1,4 @@
-// ----- custom js ----- //
+//---- custom js ----- //
 
 // hide initial
 $("#searching").hide();
@@ -15,7 +15,7 @@ $("#error").hide();
     console.log( "ready!" );
 
     // image click
-    $(".img").click(function() {
+    $("#upload-file-btn").click(function() {
 
       // empty/hide results
       $("#results").empty();
@@ -35,12 +35,16 @@ $("#error").hide();
       // show searching text
       $("#searching").show();
       console.log("searching...")
-
+var form_data = new FormData($('#upload-file')[0]);
       // ajax request
       $.ajax({
         type: "POST",
-        url: "/search",
-        data : { img : image },
+        url: "/upload",
+        data : form_data,
+        contentType: false,
+        cache: false,
+        processData: false,
+        async: false,
         // handle success
         success: function(result) {
           console.log(result.results);
