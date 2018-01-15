@@ -18,6 +18,7 @@ $("#error").hide();
     $("#upload-file-btn").click(function() {
 
       // empty/hide results
+      $("#uploaded_image").empty();
       $("#results").empty();
       $("#results-table").hide();
       $("#error").hide();
@@ -30,7 +31,6 @@ $("#error").hide();
 
       // grab image url
       var image = $(this).attr("src")
-      console.log(image)
 
       // show searching text
       $("#searching").show();
@@ -47,12 +47,13 @@ var form_data = new FormData($('#upload-file')[0]);
         async: false,
         // handle success
         success: function(result) {
-          console.log(result.results);
+          console.log(result);
           var data = result.results
+          var file = 'dataset1/'+result.file
           // show table
           $("#results-table").show();
           // loop through results, append to dom
-
+          $("#uploaded_image").append('<img src ="'+file+'">')
           for (i = 0; i < data.length; i++) {
 
             $("#results").append('<tr><th><a href="'+url+data[i]["image"]+'"><img src="'+url+data[i]["image"]+

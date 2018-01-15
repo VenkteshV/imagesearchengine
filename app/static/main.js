@@ -30,11 +30,11 @@ $("#error").hide();
 
       // grab image url
       var image = $(this).attr("src")
-      console.log(image)
+      console.log('#########')
 
       // show searching text
       $("#searching").show();
-      console.log("searching...")
+      console.log("searching...",image);
 
       // ajax request
       $.ajax({
@@ -57,7 +57,7 @@ $("#error").hide();
         },
         // handle error
         error: function(error) {
-          console.log(error);
+          console.log('error',error);
           // append to dom
           $("#error").append()
         }

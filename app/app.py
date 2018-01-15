@@ -9,7 +9,9 @@ from pyimagesearch.searcher import Searcher
 # create flask instance
 
 app = Flask(__name__, static_url_path = "", static_folder = "static")
-app.config['UPLOAD_FOLDER'] = 'static/dataset1/'
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/dataset1')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['ALLOWED_EXTENSIONS']=set(['txt','pdf','jpg','png','gif'])
 def allowed_file(filename):
     return '.' in filename and \
@@ -31,7 +33,8 @@ def search():
         RESULTS_ARRAY = []
 
         # get url
-        image_url = 'static/'+request.form.get('img')
+        url = os.path.join(APP_ROOT, 'static')
+        image_url = os.path.join(url,request.form.get('img'))
         print image_url
 
         try:
@@ -65,6 +68,7 @@ def search():
 @app.route('/upload',methods=['POST'])
 def upload():
     file=request.files['file']
+    print('upload',file)
     if file and allowed_file(file.filename):
         filename=secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
@@ -82,10 +86,10 @@ def upload():
 
             # load the query image and describe it
             from skimage import io
-            filename='static/dataset1/'+filename
-            print filename
+            filename=os.path.join(app.config['UPLOAD_FOLDER'],filename)
+            print'###'+ filename
             query = io.imread(filename)
-            print query.shape
+            print 'shape'
             features = cd.describe(query)
 
             # perform the search
@@ -98,7 +102,7 @@ def upload():
                     {"image": str(resultID), "score": str(score)})
 
             # return success
-            return jsonify(results=(RESULTS_ARRAY[::-1][:3]))
+            return jsonify(results=(RESULTS_ARRAY[::-1][:3]),file=file.filename)
 
         except:
 
